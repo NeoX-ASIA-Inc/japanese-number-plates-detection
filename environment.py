@@ -25,18 +25,25 @@ def upload(file):
 
     if os.environ.get('FLASK_ENV')=='production':
         import boto3
-        from botocore.exceptions import ClientError
 
         bucket_name = os.environ['BUCKET']
         s3 = boto3.resource('s3')
 
         s3.Bucket(bucket_name).upload_fileobj(file, filename)
-        # s3_client = boto3.client('s3')
-        # try:
-        #     response_filepath = s3_client.generate_presigned_url('get_object',
-        #                                                 Params={'Bucket': bucket_name,
-        #                                                         'Key': filename},
-        #                                                 ExpiresIn=3600)
-        # except ClientError as e:
-        #     logging.error(e)
-        #     return None
+
+# def getFile():
+#     if os.environ.get('FLASK_ENV')=='development':
+#         file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+#     if os.environ.get('FLASK_ENV')=='production':
+#         import boto3
+#         from botocore.exceptions import ClientError
+#         s3_client = boto3.client('s3')
+#         try:
+#             response_filepath = s3_client.generate_presigned_url('get_object',
+#                                                         Params={'Bucket': bucket_name,
+#                                                                 'Key': filename},
+#                                                         ExpiresIn=3600)
+#         except ClientError as e:
+#             logging.error(e)
+#             return None
