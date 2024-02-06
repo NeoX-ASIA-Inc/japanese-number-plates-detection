@@ -9,12 +9,12 @@ def allowed_file(filename):
 
 def upload(file):
     # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            return 'No selected file'
+    # empty file without a filename.
+    if file.filename == '':
+        return 'No selected file'
 
-        if not allowed_file(file.filename):
-            return 'FILE NOT ALLOWED!'
+    if not allowed_file(file.filename):
+        return 'FILE NOT ALLOWED!'
 
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_FOLDER, filename))
+    filename = secure_filename(file.filename)
+    file.save(os.path.join(UPLOAD_FOLDER, filename))
