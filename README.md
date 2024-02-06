@@ -100,6 +100,7 @@ You can install all needed dependencies with the following commands:
 ```bash
 pip install werkzeug
 pip install -r requirements.txt
+export FLASK_ENV=development
 ```
 
 At this point, you can run your application locally with the following command:
