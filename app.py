@@ -1,9 +1,31 @@
-from flask import Flask, render_template, jsonify, make_response
+import os
+from flask import Flask, request, render_template, jsonify, make_response
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-@app.route("/")
+UPLOAD_FOLDER = 'storage'
+ALLOWED_EXTENSIONS = {'jpg', 'png', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route("/", methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        uploaded_file = request.files['file-to-upload']
+
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if uploaded_file.filename == '':
+            return 'No selected file'
+
+        if not allowed_file(uploaded_file.filename):
+            return 'FILE NOT ALLOWED!'
+
+        filename = secure_filename(uploaded_file.filename)
+        uploaded_file.save(os.path.join(UPLOAD_FOLDER, filename))
+
     return render_template('index.html')
 
 @app.route("/processing")
