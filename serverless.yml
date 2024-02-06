@@ -9,6 +9,11 @@ custom:
 provider:
   name: aws
   runtime: python3.10
+  stage: production
+  region: ap-northeast-1
+  iam:
+    role:
+      name: ${self:service}-lambda-Role
 
 functions:
   api:
