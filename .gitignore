@@ -161,5 +161,5 @@ cython_debug/
 node_modules/
 .serverless/
 .serverless-wsgi
-storage/*
-!storage/.keep
+static/*
+!static/.keep

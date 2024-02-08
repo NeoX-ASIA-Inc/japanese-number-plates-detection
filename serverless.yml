@@ -72,5 +72,5 @@ package:
   exclude:
     - README.md
     - node_modules/**
-    - storage/**
+    - static/**
     - venv/**
