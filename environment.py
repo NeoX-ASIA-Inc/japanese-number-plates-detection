@@ -38,18 +38,18 @@ def getFile(filename):
         filepath = url_for(UPLOAD_FOLDER, filename = filename)
         return filepath
 
-    # if os.environ.get('FLASK_ENV')=='production':
-    #     import boto3
-    #     from botocore.exceptions import ClientError
+    if os.environ.get('FLASK_ENV')=='production':
+        import boto3
+        from botocore.exceptions import ClientError
 
-    #     s3_client = boto3.client('s3')
-    #     bucket_name = os.environ['BUCKET']
-    #     try:
-    #         filepath = s3_client.generate_presigned_url('get_object',
-    #                                                     Params={'Bucket': bucket_name,
-    #                                                             'Key': filename},
-    #                                                     ExpiresIn=3600)
-    #         return filepath
-    #     except ClientError as e:
-    #         logging.error(e)
-    #         return None
+        s3_client = boto3.client('s3')
+        bucket_name = os.environ['BUCKET']
+        try:
+            filepath = s3_client.generate_presigned_url('get_object',
+                                                        Params={'Bucket': bucket_name,
+                                                                'Key': filename},
+                                                        ExpiresIn=3600)
+            return filepath
+        except ClientError as e:
+            logging.error(e)
+            return None
