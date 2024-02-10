@@ -1,9 +1,19 @@
-from flask import Flask, render_template, jsonify, make_response
+from flask import Flask, request, render_template, jsonify, make_response
+from werkzeug.utils import secure_filename
+import environment
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        uploaded_file = request.files['file-to-upload']
+        filename = secure_filename(uploaded_file.filename)
+        environment.upload(uploaded_file)
+        response_filepath = environment.getFile(filename)
+        if response_filepath:
+            return render_template('index.html', filepath=response_filepath)
+
     return render_template('index.html')
 
 @app.route("/processing")

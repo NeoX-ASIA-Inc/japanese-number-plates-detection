@@ -14,6 +14,19 @@ provider:
   iam:
     role:
       name: ${self:service}-lambda-Role
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "s3:ListBucket"
+            - "s3:GetObject"
+            - "s3:PutObject"
+            - "s3:DeleteObject"
+          Resource:
+            - "*"
+  environment:
+    BUCKET: ${self:service}-${self:provider.stage}
+    REGION: ${self:provider.region}
+    FLASK_ENV: production
 
 functions:
   api:
@@ -24,3 +37,40 @@ functions:
 plugins:
   - serverless-wsgi
   - serverless-python-requirements
+
+resources:
+  Resources:
+    InputBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.BUCKET}
+        LifecycleConfiguration:
+          Rules:
+            - Status: Enabled
+              ExpirationInDays: 1
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          IgnorePublicAcls: true
+          BlockPublicPolicy: false
+          RestrictPublicBuckets: true
+
+    DetectInputBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: InputBucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action: s3:GetObject
+              Resource:
+                Fn::Sub: ${InputBucket.Arn}/*
+              Principal: "*"
+
+package:
+  exclude:
+    - README.md
+    - node_modules/**
+    - static/**
+    - venv/**
