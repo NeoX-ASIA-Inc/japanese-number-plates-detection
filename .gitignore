@@ -161,5 +161,6 @@ cython_debug/
 node_modules/
 .serverless/
 .serverless-wsgi
-static/*
+static/upload/*
+!static/upload/.keep
 !static/.keep
