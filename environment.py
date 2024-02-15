@@ -3,7 +3,7 @@ import logging
 
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = 'static'
+UPLOAD_FOLDER = 'upload'
 ALLOWED_EXTENSIONS = {'jpg', 'png', 'jpeg'}
 
 def allowed_file(filename):
@@ -21,7 +21,7 @@ def upload(file):
     filename = secure_filename(file.filename)
 
     if os.environ.get('FLASK_ENV')=='development':
-        file.save(os.path.join(UPLOAD_FOLDER, filename))
+        file.save(os.path.join('static', UPLOAD_FOLDER, filename))
 
     if os.environ.get('FLASK_ENV')=='production':
         import boto3
@@ -35,7 +35,7 @@ def getFile(filename):
     if os.environ.get('FLASK_ENV')=='development':
         from flask import url_for
 
-        filepath = url_for(UPLOAD_FOLDER, filename = filename)
+        filepath = url_for('static', filename = os.path.join(UPLOAD_FOLDER, filename))
         return filepath
 
     if os.environ.get('FLASK_ENV')=='production':
